@@ -20,7 +20,7 @@ class Alert
     @user = status.user
     return unless @user == TARGET_USER
 
-    @mission, @planet, @title, minutes, credits, @item_name, @item_type, *rest = status.text.split(/\s*[-():]+\s*/)
+    @mission, @planet, @title, minutes, credits, @item_name, @item_type, *rest = status.text.split(/\s*[():]+\s*|\s+-\s+/)
 
     @valid = (minutes =~ /^\d+m$/ && credits =~ /^\d+cr$/)
     return unless @valid
