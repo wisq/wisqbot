@@ -1,0 +1,4 @@
+:consumer_key: 'foo'
+:consumer_secret: 'bar'
+:oauth_token: 'baz'
+:oauth_token_secret: 'qux'
