@@ -16,6 +16,8 @@ end
 TARGET_USER = Twitter.user("WarframeAlerts")
 
 class Alert
+  OWNED_FILE = "warframe_owned.yml"
+
   def initialize(status)
     @user = status.user
     return unless @user == TARGET_USER
@@ -39,6 +41,8 @@ class Alert
       [false, "no item offered"]
     elsif @deadline < Time.now
       [false, "deadline passed"]
+    elsif already_owned?
+      [false, "already owned"]
     else
       [true, nil]
     end
@@ -47,6 +51,16 @@ class Alert
   def message
     deadline = @deadline.strftime("%H:%M")
     "#{@item_name} (#{@item_type}) at #{@planet} until #{deadline}"
+  end
+
+  private
+
+  def already_owned?
+    blacklist = YAML.load_file(OWNED_FILE)
+    blacklist[@item_type].any? { |n| @item_name =~ /^#{n}$/ }
+  rescue StandardError => e
+    puts "Error loading #{OWNED_FILE}: #{e.inspect}"
+    return false
   end
 end
 
