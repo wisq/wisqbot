@@ -48,14 +48,6 @@ class Alert
     deadline = @deadline.strftime("%H:%M")
     "#{@item_name} (#{@item_type}) at #{@planet} until #{deadline}"
   end
-
-  def relay
-    return unless important?
-
-    puts "Alert meets criteria: #{message}"
-    Twitter.update("@wisqnet #{message}")
-    exit(1)
-  end
 end
 
 
