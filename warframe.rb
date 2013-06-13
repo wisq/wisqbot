@@ -64,17 +64,24 @@ class Alert
   end
 end
 
+$stdout.sync = $stderr.sync = true
 
-#Twitter.user_timeline(TARGET_USER.id).each do |status|
-TweetStream::Client.new.follow(TARGET_USER.id) do |status|
-  puts "---\n@#{status.user.name}: #{status.text}"
+begin
+  puts "* Starting ..."
 
-  alert = Alert.new(status)
-  important, reject_reason = alert.check
-  if important
-    puts "ALERT: #{alert.message}"
-    Twitter.update("@wisqnet #{alert.message}")
-  else
-    puts "Rejected: #{reject_reason}"
+  #Twitter.user_timeline(TARGET_USER.id).each do |status|
+  TweetStream::Client.new.follow(TARGET_USER.id) do |status|
+    puts "---\n@#{status.user.name}: #{status.text}"
+
+    alert = Alert.new(status)
+    important, reject_reason = alert.check
+    if important
+      puts "ALERT: #{alert.message}"
+      Twitter.update("@wisqnet #{alert.message}")
+    else
+      puts "Rejected: #{reject_reason}"
+    end
   end
+ensure
+  puts "* Shutting down."
 end
