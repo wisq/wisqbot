@@ -49,8 +49,11 @@ class Alert
   end
 
   def message
-    deadline = @deadline.strftime("%H:%M")
-    "#{@item_name} (#{@item_type}) at #{@planet} until #{deadline}"
+    deadline = @deadline.strftime("until %H:%M")
+    hours = (@deadline - Time.now).to_f / 3600.0
+
+    deadline = "for #{hours.round}h (#{deadline})" if hours >= 6.0
+    "#{@item_name} (#{@item_type}) at #{@planet} #{deadline}"
   end
 
   private
